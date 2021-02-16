@@ -14,12 +14,29 @@ namespace CG_II_OpenGL
       "3 - Falling cubes\n"+
       "4 - f(x,y)";
       Console.WriteLine(HelloMsg);
-      //var option = Console.ReadKey(true);
-      //Console.WriteLine(option.KeyChar);
-      using(GameWindow app = new WindowFxy())
+      choose:
+      var option = Console.ReadKey(true).KeyChar;
+      Console.WriteLine(option);
+      GameWindow app;
+      switch(option)
       {
-        app.Run();
+        case '1':
+          app = new WindowCubeUnwrap();
+          break;
+        case '2':
+          app = new WindowCubeArray();
+          break;
+        case '3':
+          app = new WindowBlocks();
+          break;
+        case '4':
+          app = new WindowFxy();
+          break;
+        default:
+          Console.WriteLine("Choose different key");
+          goto choose;
       }
+      app.Run();
     }
   }
 }
