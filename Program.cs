@@ -16,7 +16,7 @@ namespace CG_II_OpenGL
       Console.WriteLine(HelloMsg);
       //var option = Console.ReadKey(true);
       //Console.WriteLine(option.KeyChar);
-      using(GameWindow app = new WindowCubeArray())
+      using(GameWindow app = new WindowFxy())
       {
         app.Run();
       }
