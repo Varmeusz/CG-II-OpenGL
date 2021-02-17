@@ -1,10 +1,9 @@
 ﻿using System;
-using OpenTK.Windowing;
 using OpenTK.Windowing.Desktop;
 
 namespace CG_II_OpenGL
 {
-  class Program
+    class Program
   {
     static void Main(string[] args)
     {
@@ -16,7 +15,6 @@ namespace CG_II_OpenGL
       Console.WriteLine(HelloMsg);
       choose:
       var option = Console.ReadKey(true).KeyChar;
-      Console.WriteLine(option);
       GameWindow app;
       switch(option)
       {
@@ -30,13 +28,22 @@ namespace CG_II_OpenGL
           app = new WindowBlocks();
           break;
         case '4':
-          app = new WindowFxy();
+          Console.WriteLine("Type equation you want to solve for");
+          string equation = Console.ReadLine();
+          app = new WindowFxy(equation);
           break;
         default:
           Console.WriteLine("Choose different key");
           goto choose;
       }
-      app.Run();
+      try
+      {
+        app.Run();
+      }
+      catch(Exception ex)
+      {
+        Console.WriteLine("Exiting gracefully...");
+      }
     }
   }
 }

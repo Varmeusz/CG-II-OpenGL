@@ -23,6 +23,7 @@ namespace CG_II_OpenGL
     public double setRotTime = 0;
     public double translationOffset = 1;
     public int renderMethod = 5;
+    private string equation;
     private Dictionary<string, Shader> _shaderDict = new Dictionary<string, Shader>();
     private Dictionary<string, Texture> _textureDict = new Dictionary<string, Texture>();
     private List<Renderable> _renderObjects;
@@ -30,9 +31,9 @@ namespace CG_II_OpenGL
     
     private float heightMax; 
     private float heightMin;
-    public WindowFxy() : base(Util.GetGameWindowSettings(), Util.GetNativeWindowSettings())
+    public WindowFxy(string eq) : base(Util.GetGameWindowSettings(), Util.GetNativeWindowSettings())
     {
-
+      equation = eq;
     }
     protected override void OnLoad()
     {
@@ -46,7 +47,34 @@ namespace CG_II_OpenGL
       _shaderDict["MainShader"].Link();
       _renderObjects = new List<Renderable>();
       myFun = new FunMesh();
-      myFun.calcMesh(10);
+      myFun.Calculator = new RPN(equation);
+      if (!myFun.Calculator.properEquation()) 
+      {
+        this.Close();
+      }
+      try
+      {
+        myFun.Calculator.generateInfixTokens();
+      }
+      catch(Exception ex)
+      {
+        this.Close();
+      }
+      
+      if (myFun.Calculator.invalidTokens)
+      {
+        this.Close();
+      }
+      myFun.Calculator.generatePostfixTokens();
+      try
+      {
+        myFun.calcMesh(10);
+      }
+      catch(Exception ex)
+      {
+        Console.WriteLine(ex.Message);
+        this.Close();
+      }
       heightMin = myFun.Vertices.OrderByDescending(x=>x.Y).Last().Y;
       heightMax = myFun.Vertices.OrderByDescending(x=>x.Y).First().Y;
       _renderObjects.Add(new RenderObject(myFun.Vertices.ToArray(), myFun.Normals.ToArray(), _shaderDict["MainShader"].Id, "mesh"));

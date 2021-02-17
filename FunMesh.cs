@@ -7,9 +7,13 @@ namespace CG_II_OpenGL
   {
     public List<Vector3> Vertices = new List<Vector3>();
     public List<Vector3> Normals= new List<Vector3>();
+    public RPN Calculator;
     public float calcVertex(float x, float y)
     {
-      return System.MathF.Sin(x)*System.MathF.Cos(y);//*System.MathF.Log(System.MathF.Abs(x*y));
+      
+      
+      double result = Calculator.evaluatePostfix(x, y);
+      return (float)result;
       //return System.MathF.Atan(y)*System.MathF.Acos(x);
       //return System.MathF.Sin(x)*System.MathF.Cos(x+y);
     }
