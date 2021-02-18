@@ -50,7 +50,7 @@ namespace CG_II_OpenGL
       myFun.Calculator = new RPN(equation);
       if (!myFun.Calculator.properEquation()) 
       {
-        this.Close();
+        Close();
       }
       try
       {
@@ -58,12 +58,12 @@ namespace CG_II_OpenGL
       }
       catch(Exception ex)
       {
-        this.Close();
+        Close();
       }
       
       if (myFun.Calculator.invalidTokens)
       {
-        this.Close();
+        Close();
       }
       myFun.Calculator.generatePostfixTokens();
       try
@@ -73,7 +73,7 @@ namespace CG_II_OpenGL
       catch(Exception ex)
       {
         Console.WriteLine(ex.Message);
-        this.Close();
+        Close();
       }
       heightMin = myFun.Vertices.OrderByDescending(x=>x.Y).Last().Y;
       heightMax = myFun.Vertices.OrderByDescending(x=>x.Y).First().Y;
@@ -83,7 +83,6 @@ namespace CG_II_OpenGL
       
       GL.PointSize(13.0f);
       GL.PatchParameter(PatchParameterInt.PatchVertices, 13);
-      // GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Point);
       GL.Disable(EnableCap.CullFace);
       
     }
@@ -112,14 +111,12 @@ namespace CG_II_OpenGL
       GL.UniformMatrix4(20, false, ref _projectionMatrix);
       GL.UniformMatrix4(21, false, ref model);
       GL.UniformMatrix4(22, false,  ref View);
-      var tvec = new Vector3(0, 2, 0);
-
-      GL.Uniform3(23, ref tvec);
+      var lightPos = new Vector3(0, 5, 0);
+      GL.Uniform3(23, ref lightPos);
       GL.Uniform3(24, ref _camera.Position);
       GL.Uniform1(25, heightMin);
       GL.Uniform1(26, heightMax);
       mesh.Render();
-      
       SwapBuffers();
     }
     public float[]  values = {0,1,-1};
@@ -134,70 +131,6 @@ namespace CG_II_OpenGL
       new Vector3(0,0,1),
       new Vector3(1,0,1)
     };
-    public void DrawCube(RenderObject cube, Matrix4 Rotation, Vector3 Translation)
-    {
-      Matrix4 model;
-      Matrix4 View = _camera.View();
-      cube.Bind();
-     
-      model = returnModelMatrix(Translation); 
-      // //rotate individual
-      // model *= Matrix4.CreateRotationY((float)_time);
-      // //translate 
-      // model *= Matrix4.CreateTranslation(Translation*2.1f);
-      // //rotate all
-      // model *= Matrix4.CreateRotationY((float)_time);
-      GL.UniformMatrix4(20, false, ref _projectionMatrix);
-      GL.UniformMatrix4(21, false, ref model);
-      GL.UniformMatrix4(22, false,  ref View);
-      // var tvec = new Vector3((float) -Math.Cos(_time), -2, -(float) Math.Sin(_time));
-      var tvec = new Vector3(0, 2, 0);
-      GL.Uniform3(23, ref tvec);
-      //Vector3 dir = Vector3.Normalize(_camera.Position - _camera.Target);
-      GL.Uniform3(24, ref _camera.Position);
-      cube.Render();  
-    }
-    public Matrix4 model = Matrix4.Identity;
-    public Matrix4 translation = Matrix4.Identity;
-    public Matrix4 individualRotation = Matrix4.Identity;
-    public Matrix4 setRotation = Matrix4.Identity;
-    public Matrix4 returnModelMatrix(Vector3 Translation)
-    {
-      model = Matrix4.Identity;
-      switch(renderMethod)
-      {
-        case(1):
-          individualRotation = Matrix4.CreateRotationY((float)rotTime);
-          translation = Matrix4.CreateTranslation(Translation*(MathF.Sin((float)translationOffset)+2));
-          model *= individualRotation;
-          model *= translation;
-          model *= setRotation;
-          return model;
-        case(2):
-          translation = Matrix4.CreateTranslation(Translation*(MathF.Sin((float)translationOffset)+2));
-          setRotation = Matrix4.CreateRotationY((float)(setRotTime));
-          model *= individualRotation;
-          model *= translation;
-          model *= setRotation;
-          return model;
-        case(3):
-          model*=individualRotation;
-          translation = Matrix4.CreateTranslation(Translation*(MathF.Sin((float)translationOffset)+2));
-          model *= translation;
-          model *= setRotation;
-          return model;
-        case(5):
-
-          translation = Matrix4.CreateTranslation(Translation*(MathF.Sin((float)translationOffset)+2));
-          model *= individualRotation;
-          model*=translation;
-          model *= setRotation;
-          return model;
-        default:
-          return model;
-        
-      }
-    }
     protected override void OnResize(ResizeEventArgs e)
     {
       base.OnResize(e);
@@ -209,10 +142,8 @@ namespace CG_II_OpenGL
       var keyState = KeyboardState;
       var mousestate = MouseState;
       if(mousestate.ScrollDelta.Y>0)
-      {
         size+=1;
-      }else 
-      if(mousestate.ScrollDelta.Y<0)
+      else if(mousestate.ScrollDelta.Y<0)
         size-=1;
       if(keyState.IsKeyDown(Keys.Escape))
         Close();
@@ -231,16 +162,6 @@ namespace CG_II_OpenGL
         _camera.Position += camSpeed * new Vector3(0,0.5f,0);
       if(keyState.IsKeyDown(Keys.LeftShift) || keyState.IsKeyDown(Keys.RightShift))
         _camera.Position += camSpeed * new Vector3(0,-0.5f,0);
-      if(keyState.IsKeyDown(Keys.D1))
-        renderMethod = 1;
-      if(keyState.IsKeyDown(Keys.D2))
-        renderMethod = 2;
-      if(keyState.IsKeyDown(Keys.D3))
-        renderMethod = 3;
-      if(keyState.IsKeyDown(Keys.D4))
-        renderMethod = 4;
-      if(keyState.IsKeyDown(Keys.D5))
-        renderMethod = 5;
       if(keyState.IsKeyDown(Keys.Comma))
         GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
       if(keyState.IsKeyDown(Keys.Period))

@@ -78,72 +78,38 @@ namespace CG_II_OpenGL
       _time += e.Time;
       var x =_camera.Position;
       Title = MathF.Round((float)x.X,2).ToString()+" " + MathF.Round((float)x.Y,2).ToString() + " "+ MathF.Round((float)x.Z,2).ToString();
-
       GL.ClearColor(Color4.Black);
       GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
       if(renderMethod==1)
-      {
         rotTime += e.Time;
-      }
       if(renderMethod==2)
         setRotTime += e.Time;
       if(renderMethod ==3)
         translationOffset += e.Time;
       DrawScene();
-      
-      
       SwapBuffers();
     }
     public void DrawScene()
     {
-      
       GL.Enable(EnableCap.DepthTest);
       CreateProjection();
-      
       RenderObject cube = (RenderObject) _renderObjects.Where(x=> x.Name == "cube").First();
       for (int i = 0; i < size; i++)
-      {
         for (int j = 0; j < size; j++)
-        {
           for (int k = 0; k < size; k++)
-          {
             DrawCube(cube, Matrix4.Identity, new Vector3(i-size/2,j-size/2,k-size/2));
-          }
-        }
-      }
-      
-      
-      
-      
-
     }
-    public float[]  values = {0,1,-1};
-    public static Vector3[] translations =
-    {
-      new Vector3(0,0,0),
-      new Vector3(1,0,0),
-      new Vector3(1,1,0),
-      new Vector3(1,1,1),
-      new Vector3(0,1,0),
-      new Vector3(0,1,1),
-      new Vector3(0,0,1),
-      new Vector3(1,0,1)
-
-      
-
-    };
     public void DrawCube(RenderObject cube, Matrix4 Rotation, Vector3 Translation)
     {
       Matrix4 model;
       Matrix4 View = _camera.View();
       cube.Bind();
-     
       model = returnModelMatrix(Translation); 
       GL.UniformMatrix4(20, false, ref _projectionMatrix);
       GL.UniformMatrix4(21, false, ref model);
       GL.UniformMatrix4(22, false,  ref View);
-      var tvec = new Vector3(0, 2, 0);
-      GL.Uniform3(23, ref tvec);
+      var LightPos = new Vector3(0, 2, 0);
+      GL.Uniform3(23, ref LightPos);
       GL.Uniform3(24, ref _camera.Position);
       cube.Render();  
     }
@@ -185,7 +151,6 @@ namespace CG_II_OpenGL
           return model;
         default:
           return model;
-        
       }
     }
     protected override void OnResize(ResizeEventArgs e)
@@ -199,9 +164,8 @@ namespace CG_II_OpenGL
       var keyState = KeyboardState;
       var mousestate = MouseState;
       if(mousestate.ScrollDelta.Y>0)
-      {
         size+=1;
-      }else 
+      else 
       if(mousestate.ScrollDelta.Y<0)
         size-=1;
       if(keyState.IsKeyDown(Keys.Escape))
@@ -211,8 +175,6 @@ namespace CG_II_OpenGL
         _camera.Position += camSpeed * _camera.Target;
       if(keyState.IsKeyDown(Keys.Down))
         _camera.Position -= camSpeed * _camera.Target;
-      
-
       if(keyState.IsKeyDown(Keys.Left))
         _camera.Position -= Vector3.Normalize(Vector3.Cross(_camera.Target, _camera.upVector)) * (camSpeed );
       if(keyState.IsKeyDown(Keys.Right))
@@ -231,9 +193,7 @@ namespace CG_II_OpenGL
         renderMethod = 4;
       if(keyState.IsKeyDown(Keys.D5))
         renderMethod = 5;
-
     }
-    
     private void OnClosed(object sender, System.EventArgs e)
     {
       Close();
@@ -242,11 +202,8 @@ namespace CG_II_OpenGL
     {
       base.Close();
     }
-
-
     private void CreateProjection()
     {
-      
         var aspectRatio = (float) (800/800);
         //_projectionMatrix = Matrix4.CreateOrthographic(Width,Height,1f,3f);
         _projectionMatrix = Matrix4.CreatePerspectiveFieldOfView(
@@ -255,7 +212,5 @@ namespace CG_II_OpenGL
             0.1f,
             1000f);
     }
-
-
   }
 }

@@ -10,12 +10,7 @@ namespace CG_II_OpenGL
     public RPN Calculator;
     public float calcVertex(float x, float y)
     {
-      
-      
-      double result = Calculator.evaluatePostfix(x, y);
-      return (float)result;
-      //return System.MathF.Atan(y)*System.MathF.Acos(x);
-      //return System.MathF.Sin(x)*System.MathF.Cos(x+y);
+      return (float) Calculator.evaluatePostfix(x, y);
     }
     public Vector3 calcNormal(Vector3 x0, Vector3 x1,Vector3 x2)
     {

@@ -131,62 +131,6 @@ namespace CG_II_OpenGL
             GL.Uniform3(24, ref _camera.Position);
             cube.Render();
         }
-        public void DrawCube(RenderObject cube, Matrix4 Rotation, Vector3 Translation)
-        {
-            Matrix4 model;
-            Matrix4 View = _camera.View();
-            cube.Bind();
-
-            model = Matrix4.Identity * Matrix4.CreateTranslation(Translation);
-            GL.UniformMatrix4(20, false, ref _projectionMatrix);
-            GL.UniformMatrix4(21, false, ref model);
-            GL.UniformMatrix4(22, false, ref View);
-            var tvec = new Vector3(0, 2, 0);
-            GL.Uniform3(23, ref tvec);
-            GL.Uniform3(24, ref _camera.Position);
-            cube.Render();
-        }
-        public Matrix4 model = Matrix4.Identity;
-        public Matrix4 translation = Matrix4.Identity;
-        public Matrix4 individualRotation = Matrix4.Identity;
-        public Matrix4 setRotation = Matrix4.Identity;
-        public Matrix4 returnModelMatrix(Vector3 Translation)
-        {
-            model = Matrix4.Identity;
-            switch (renderMethod)
-            {
-                case (1):
-                    individualRotation = Matrix4.CreateRotationY((float)rotTime);
-                    translation = Matrix4.CreateTranslation(Translation * (MathF.Sin((float)translationOffset) + 2));
-                    model *= individualRotation;
-                    model *= translation;
-                    model *= setRotation;
-                    return model;
-                case (2):
-                    translation = Matrix4.CreateTranslation(Translation * (MathF.Sin((float)translationOffset) + 2));
-                    setRotation = Matrix4.CreateRotationY((float)(setRotTime));
-                    model *= individualRotation;
-                    model *= translation;
-                    model *= setRotation;
-                    return model;
-                case (3):
-                    model *= individualRotation;
-                    translation = Matrix4.CreateTranslation(Translation * (MathF.Sin((float)translationOffset) + 2));
-                    model *= translation;
-                    model *= setRotation;
-                    return model;
-                case (5):
-
-                    translation = Matrix4.CreateTranslation(Translation * (MathF.Sin((float)translationOffset) + 2));
-                    model *= individualRotation;
-                    model *= translation;
-                    model *= setRotation;
-                    return model;
-                default:
-                    return model;
-
-            }
-        }
         protected override void OnResize(ResizeEventArgs e)
         {
             base.OnResize(e);

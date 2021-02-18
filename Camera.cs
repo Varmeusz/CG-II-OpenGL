@@ -19,16 +19,11 @@ namespace CG_II_OpenGL
     public Matrix4 LookAt;
     public Camera()
     {
-      //view/ lookat vectors
       Position = new Vector3(5f, 5f, 12f);
       Target = new Vector3(0f, 0f, 0f);
       upVector = new Vector3(0.0f, 1.0f, 0.0f);
-
       cameraDirection = Vector3.Normalize(Position - Target);
       LookAt = View();
-      // Vector3 cameraRight = Vector3.Normalize(Vector3.Cross(_upVector, _cameraDirection));
-      // _upVector = Vector3.Cross(_cameraDirection, cameraRight);
-      // Matrix4 view = Matrix4.LookAt(_cameraPosition, _cameraDirection, _upVector);
     }
     public Matrix4 View()
     {

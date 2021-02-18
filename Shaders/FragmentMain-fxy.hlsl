@@ -11,7 +11,7 @@ layout(location = 26) uniform float objColorMax;
 void main(void)
 {
 	vec3 norm = normalize(vs_normal);
-	//if(gl_FrontFacing == false) norm *= -1;
+	if(gl_FrontFacing == false) norm *= -1;
 	//norm = vec3(0);
 	vec3 lightDir = normalize(lightPos - FragPos);
 	float diff = max(dot(norm, lightDir), 0.0);

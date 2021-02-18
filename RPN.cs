@@ -17,7 +17,7 @@ namespace CG_II_OpenGL
         {
         }
     }
-    public class RPN
+    public class RPN 
     {
         string equation;
         public List<string> infixTokens = new List<string>();

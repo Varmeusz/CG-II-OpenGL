@@ -65,11 +65,5 @@ namespace CG_II_OpenGL
       }
       return positions;
     }
-    public static Vector3[] Positions()
-    {
-      Vector3[] positions = new Vector3[17];
-
-      return positions;
-    }
   }
 }

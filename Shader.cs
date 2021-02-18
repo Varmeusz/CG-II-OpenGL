@@ -47,7 +47,6 @@ namespace CG_II_OpenGL
       if(success==0){
         var infoLog = GL.GetShaderInfoLog(shader);
         Debug.WriteLine($"GL.CompileShader [vertexShader] had info log {infoLog}");
-
       }
     }
     public void checkForLinkingErrors(int program)
