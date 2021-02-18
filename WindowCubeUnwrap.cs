@@ -97,58 +97,60 @@ namespace CG_II_OpenGL
       Matrix4 model;
       Matrix4 View = _camera.View();
             
-      for(int i = 0; i < 5; i++)
+      for(int i = -3; i < 3; i++)
       {
-        foreach (var item in _renderObjects)
+        for(int j = -3; j < 3; j++)
         {
-          model = Matrix4.Identity;
-          item.Bind();
-          if(item.Name == "1")
+          foreach (var item in _renderObjects)
           {
-            model *= Matrix4.CreateTranslation(0.5f, 0.5f,0);
-            model *= Matrix4.CreateRotationZ(rotateValues[0]);
-            model *= Matrix4.CreateTranslation(-0.5f, -0.5f,0);
-          }
-          if(item.Name == "2")
-          {
-            model *= Matrix4.CreateTranslation(-0.5f,.5f,0);
-            model *= Matrix4.CreateRotationZ(-rotateValues[1]);
-            model *= Matrix4.CreateTranslation(0.5f,-0.5f,0);
-          }
-          if(item.Name == "4")
-          {
-            float s = MathF.Sin((float)-rotateValues[1]);
-            float c = MathF.Cos((float)-rotateValues[1]);
-          
-            model *= Matrix4.CreateTranslation(-0.5f,-0.5f,0);
-            model *= Matrix4.CreateRotationZ((float)-2*rotateValues[1]);
-
-            model *= Matrix4.CreateTranslation(0.5f,+0.5f,0);
-            model *= Matrix4.CreateTranslation(0,-1,0);
+            model = Matrix4.Identity;
+            item.Bind();
+            if(item.Name == "1")
+            {
+              model *= Matrix4.CreateTranslation(0.5f, 0.5f,0);
+              model *= Matrix4.CreateRotationZ(rotateValues[0]);
+              model *= Matrix4.CreateTranslation(-0.5f, -0.5f,0);
+            }
+            if(item.Name == "2")
+            {
+              model *= Matrix4.CreateTranslation(-0.5f,.5f,0);
+              model *= Matrix4.CreateRotationZ(-rotateValues[1]);
+              model *= Matrix4.CreateTranslation(0.5f,-0.5f,0);
+            }
+            if(item.Name == "4")
+            {
+              float s = MathF.Sin((float)-rotateValues[1]);
+              float c = MathF.Cos((float)-rotateValues[1]);
             
-            model *= Matrix4.CreateTranslation(-s,c,0);
-          }
-          if(item.Name == "5")
-          {
-            model *= Matrix4.CreateTranslation(-0.5f,.5f,+0.5f);
-            model *= Matrix4.CreateRotationX(-rotateValues[2]);
-            model *= Matrix4.CreateTranslation(0.5f,-.5f,-0.5f);
-          }
-          if(item.Name == "6")
-          {
-            model *= Matrix4.CreateTranslation(-0.5f, .5f, -0.5f);
-            model *= Matrix4.CreateRotationX(rotateValues[3]);
-            model *= Matrix4.CreateTranslation(0.5f, -.5f, 0.5f);
-          }
-          model *= Matrix4.CreateTranslation(i*2,0,-i*2);
-          GL.UniformMatrix4(20, false, ref _projectionMatrix);
-          GL.UniformMatrix4(21, false, ref model);
-          GL.UniformMatrix4(22, false,  ref View);
-          var tvec = new Vector3(0, 2, 0);
-          GL.Uniform3(23, ref tvec);
-          GL.Uniform3(24, ref _camera.Position);
-          item.Render();
+              model *= Matrix4.CreateTranslation(-0.5f,-0.5f,0);
+              model *= Matrix4.CreateRotationZ((float)-2*rotateValues[1]);
 
+              model *= Matrix4.CreateTranslation(0.5f,+0.5f,0);
+              model *= Matrix4.CreateTranslation(0,-1,0);
+              
+              model *= Matrix4.CreateTranslation(-s,c,0);
+            }
+            if(item.Name == "5")
+            {
+              model *= Matrix4.CreateTranslation(-0.5f,.5f,+0.5f);
+              model *= Matrix4.CreateRotationX(-rotateValues[2]);
+              model *= Matrix4.CreateTranslation(0.5f,-.5f,-0.5f);
+            }
+            if(item.Name == "6")
+            {
+              model *= Matrix4.CreateTranslation(-0.5f, .5f, -0.5f);
+              model *= Matrix4.CreateRotationX(rotateValues[3]);
+              model *= Matrix4.CreateTranslation(0.5f, -.5f, 0.5f);
+            }
+            model *= Matrix4.CreateTranslation(i*4,0,-j*3);
+            GL.UniformMatrix4(20, false, ref _projectionMatrix);
+            GL.UniformMatrix4(21, false, ref model);
+            GL.UniformMatrix4(22, false,  ref View);
+            var tvec = new Vector3(0, 2, 0);
+            GL.Uniform3(23, ref tvec);
+            GL.Uniform3(24, ref _camera.Position);
+            item.Render();
+          }
         }
       }
       
